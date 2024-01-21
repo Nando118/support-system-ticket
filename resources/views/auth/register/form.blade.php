@@ -30,7 +30,6 @@
 
 <div class="container-fluid vh-100 d-flex align-items-center" style="background-color: hsla(0, 0%, 0%, 0.4);">
     <div class="container">
-
         <div class="row d-flex align-items-center justify-content-center">
             <div class="col-12 col-md-6">
                 <div class="card px-3">
@@ -38,10 +37,20 @@
                         <div class="card-img text-center mb-3">
                             <img class="mb-4" src="{{ asset("img/hoyoverse-logo.png") }}" alt="hoyoverse-logo.png" style="max-width: 50%;"/>
                         </div>
-                        <form action="{{ route("login.post") }}" method="POST">
+                        <form action="{{ route("register.post") }}" method="POST">
                             @csrf
                             <div class="form-group">
-                                <input type="email" class="form-control @error('email') is-invalid @enderror" id="exampleInputEmail1" name="email" value="{{ old('email') }}" placeholder="Enter email">
+                                <label for="formGroupExampleInput">Your Name</label>
+                                <input type="text" class="form-control @error('name') is-invalid @enderror" id="formGroupExampleInput" name="name" value="{{ old('name') }}">
+                                @error('name')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Email Address</label>
+                                <input type="email" class="form-control @error('email') is-invalid @enderror" id="exampleInputEmail1" name="email" value="{{ old('email') }}">
                                 @error('email')
                                     <div class="invalid-feedback">
                                         {{ $message }}
@@ -49,24 +58,20 @@
                                 @enderror
                             </div>
                             <div class="form-group">
-                                <input type="password" class="form-control @error('password') is-invalid @enderror" id="exampleInputPassword1" name="password" placeholder="Enter password">
+                                <label for="exampleInputEmail1">Password</label>
+                                <input type="password" class="form-control @error('password') is-invalid @enderror" id="exampleInputPassword1" name="password" value="{{ old('password') }}">
                                 @error('password')
                                     <div class="invalid-feedback">
                                         {{ $message }}
                                     </div>
                                 @enderror
                             </div>
-                            <div class="form-group" style="margin-top: 2rem; margin-bottom: 1.5rem;">
-                                <div class="row">
-                                    <div class="col-6 text-left">
-                                        <a href="{{ route("register.index") }}">Register now</a>
-                                    </div>
-                                    <div class="col-6 text-right">
-                                        <a href="">Forgot password?</a>
-                                    </div>
-                                </div>
+
+                            <button type="submit" class="btn w-100 btn-primary mt-2 mb-3">Register</button>
+
+                            <div class="form-group text-center">
+                                Already have account? <a href="{{ route("login.index") }}">Login here</a>
                             </div>
-                            <button type="submit" class="btn w-100 btn-dark">Submit</button>
                         </form>
                     </div>
                 </div>
@@ -87,16 +92,8 @@
     @if(session('error'))
         Swal.fire({
             icon: 'error',
-            title: 'Gagal masuk!',
+            title: 'Gagal mendaftar!',
             text: '{{ session('error') }}'
-        });
-    @endif
-
-    @if(session('success'))
-        Swal.fire({
-            icon: 'success',
-            title: 'Berhasil mendaftar!',
-            text: '{{ session('success') }}'
         });
     @endif
 </script>

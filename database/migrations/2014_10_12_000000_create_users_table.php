@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('role', 100)->nullable(false)->default("regular_user");
             $table->rememberToken();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

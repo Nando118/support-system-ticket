@@ -13,6 +13,16 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('auth.login');
+Route::middleware(['guest'])->group(function () {
+    Route::get("/login", [\App\Http\Controllers\Auth\AuthController::class, "loginIndex"])->name("login.index");
+    Route::post("/login", [\App\Http\Controllers\Auth\AuthController::class, "loginPost"])->name("login.post");
+
+    Route::get("/register", [\App\Http\Controllers\Auth\AuthController::class, "registerIndex"])->name("register.index");
+    Route::post("/register", [\App\Http\Controllers\Auth\AuthController::class, "registerPost"])->name("register.post");
+});
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/', function () {
+        return view('welcome');
+    })->name("welcome");
 });
