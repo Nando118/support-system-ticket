@@ -62,7 +62,7 @@
                                         <a href="{{ route("register.index") }}">Register now</a>
                                     </div>
                                     <div class="col-6 text-right">
-                                        <a href="">Forgot password?</a>
+                                        <a href="{{ route("password.request") }}">Forgot password?</a>
                                     </div>
                                 </div>
                             </div>
@@ -84,19 +84,51 @@
 
 <script>
     // Tampilkan SweetAlert2 ketika ada pesan error dari server
-    @if(session('error'))
+    @if(session('invalid_credentials'))
         Swal.fire({
             icon: 'error',
             title: 'Gagal masuk!',
-            text: '{{ session('error') }}'
+            text: '{{ session('invalid_credentials') }}'
         });
     @endif
 
-    @if(session('success'))
+    @if(session('error_register'))
+        Swal.fire({
+            icon: 'error',
+            title: 'Gagal mendaftar!',
+            text: '{{ session('error_register') }}'
+        });
+    @endif
+
+    @if(session('error_reset_password'))
+        Swal.fire({
+            icon: 'error',
+            title: 'Gagal reset password!',
+            text: '{{ session('error_reset_password') }}'
+        });
+    @endif
+
+    @if(session('failed_reset_password'))
+        Swal.fire({
+            icon: 'error',
+            title: 'Gagal reset password!',
+            text: '{{ session('failed_reset_password') }}'
+        });
+    @endif
+
+    @if(session('success_register'))
         Swal.fire({
             icon: 'success',
-            title: 'Berhasil mendaftar!',
-            text: '{{ session('success') }}'
+            title: 'Registrasi berhasil!',
+            text: '{{ session('success_register') }}'
+        });
+    @endif
+
+    @if(session('success_reset_password'))
+        Swal.fire({
+            icon: 'success',
+            title: 'Password berhasil direset!',
+            text: '{{ session('success_reset_password') }}'
         });
     @endif
 </script>

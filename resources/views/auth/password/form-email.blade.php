@@ -37,37 +37,19 @@
                         <div class="card-img text-center mb-3">
                             <img class="mb-4" src="{{ asset("img/hoyoverse-logo.png") }}" alt="hoyoverse-logo.png" style="max-width: 50%;"/>
                         </div>
-                        <form action="{{ route("register.post") }}" method="POST">
+                        <form action="{{ route("password.email") }}" method="POST">
                             @csrf
+
                             <div class="form-group">
-                                <label for="formGroupExampleInput">Your Name</label>
-                                <input type="text" class="form-control @error('name') is-invalid @enderror" id="formGroupExampleInput" name="name" value="{{ old('name') }}">
-                                @error('name')
-                                    <div class="invalid-feedback">
-                                        {{ $message }}
-                                    </div>
-                                @enderror
-                            </div>
-                            <div class="form-group">
-                                <label for="exampleInputEmail1">Email Address</label>
-                                <input type="email" class="form-control @error('email') is-invalid @enderror" id="exampleInputEmail1" name="email" value="{{ old('email') }}">
+                                <input type="email" class="form-control @error('email') is-invalid @enderror" id="exampleInputEmail1" name="email" placeholder="Enter email" value="{{ old('email') }}">
                                 @error('email')
                                     <div class="invalid-feedback">
                                         {{ $message }}
                                     </div>
                                 @enderror
                             </div>
-                            <div class="form-group">
-                                <label for="exampleInputEmail1">Password</label>
-                                <input type="password" class="form-control @error('password') is-invalid @enderror" id="exampleInputPassword1" name="password" value="{{ old('password') }}">
-                                @error('password')
-                                    <div class="invalid-feedback">
-                                        {{ $message }}
-                                    </div>
-                                @enderror
-                            </div>
 
-                            <button type="submit" class="btn w-100 btn-primary mt-2 mb-3">Register</button>
+                            <button type="submit" class="btn w-100 btn-success mt-2 mb-3">Check</button>
 
                             <div class="form-group text-center">
                                 Already have account? <a href="{{ route("login.index") }}">Login here</a>
@@ -89,11 +71,19 @@
 
 <script>
     // Tampilkan SweetAlert2 ketika ada pesan error dari server
-    @if(session('failed_register'))
+    @if(session('send_reset_link_failed'))
         Swal.fire({
-            icon: 'failed_register',
-            title: 'Registrasi gagal!',
-            text: '{{ session('failed_register') }}'
+            icon: 'error',
+            title: 'Gagal mengirim link!',
+            text: '{{ session('send_reset_link_failed') }}'
+        });
+    @endif
+
+    @if(session('send_reset_link_success'))
+        Swal.fire({
+            icon: 'success',
+            title: 'Berhasil mengirim link!',
+            text: '{{ session('send_reset_link_success') }}'
         });
     @endif
 </script>

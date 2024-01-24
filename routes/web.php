@@ -19,6 +19,11 @@ Route::middleware(['guest'])->group(function () {
 
     Route::get("/register", [\App\Http\Controllers\Auth\AuthController::class, "registerIndex"])->name("register.index");
     Route::post("/register", [\App\Http\Controllers\Auth\AuthController::class, "registerPost"])->name("register.post");
+
+    Route::get("/forgot-password", [\App\Http\Controllers\Auth\AuthController::class, "forgotPasswordRequest"])->name("password.request");
+    Route::post("/forgot-password", [\App\Http\Controllers\Auth\AuthController::class, "forgotPasswordEmail"])->name("password.email");
+    Route::get("/reset-password/{token}", [\App\Http\Controllers\Auth\AuthController::class, "resetPassword"])->name("password.reset");
+    Route::post("/reset-password", [\App\Http\Controllers\Auth\AuthController::class, "resetPasswordUpdate"])->name("password.update");
 });
 
 Route::middleware(['auth'])->group(function () {
