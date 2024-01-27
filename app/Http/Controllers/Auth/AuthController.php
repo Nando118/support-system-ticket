@@ -35,7 +35,7 @@ class AuthController extends Controller
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
 
-            return redirect()->intended(route("welcome"));
+            return redirect()->intended(route("home.index"));
         }
 
         return redirect()->back()->with('invalid_credentials', 'Kredensial tidak valid!');
@@ -114,5 +114,29 @@ class AuthController extends Controller
         } else {
             return redirect()->route("password.request")->with('error_reset_password', 'Terjadi kesalahan saat proses reset password!');
         }
+    }
+
+    public function logout(Request $request) {
+        /**
+         * Cek apakah ada autentikasi user yang sedang berlangsung atau tidak
+         */
+        if (auth()->check()) {
+            /**
+             * Jika ada hapus sesi autentikasi user yang sedang berlangsun saat ini
+             */
+            Auth::logout();
+
+            /**
+             * Buat invalid session login sebelumnya
+             */
+            $request->session()->invalidate();
+
+            /**
+             * Regenerate token csrf baru
+             */
+            $request->session()->regenerateToken();
+        }
+
+        return redirect(route('login.index'));
     }
 }

@@ -7,6 +7,9 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>{{ $title_page }}</title>
 
+    {{--  Fav Icon  --}}
+    <link rel="icon" href="{{ asset("img/paimon.ico") }}" type="image/x-icon">
+
     {{--  BOOTSTRAP CSS  --}}
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
 
@@ -56,13 +59,13 @@
                                     </div>
                                 @enderror
                             </div>
-                            <div class="form-group" style="margin-top: 2rem; margin-bottom: 1.5rem;">
+                            <div class="form-group" style="margin-top: 1.5rem; margin-bottom: 1.5rem;">
                                 <div class="row">
                                     <div class="col-6 text-left">
-                                        <a href="{{ route("register.index") }}">Register now</a>
+                                        <a href="{{ route("register.index") }}" class="text-decoration-none">Register now</a>
                                     </div>
                                     <div class="col-6 text-right">
-                                        <a href="{{ route("password.request") }}">Forgot password?</a>
+                                        <a href="{{ route("password.request") }}" class="text-decoration-none">Forgot password?</a>
                                     </div>
                                 </div>
                             </div>

@@ -7,6 +7,9 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>{{ $title_page }}</title>
 
+    {{--  Fav Icon  --}}
+    <link rel="icon" href="{{ asset("img/paimon.ico") }}" type="image/x-icon">
+
     {{--  BOOTSTRAP CSS  --}}
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
 
@@ -70,7 +73,7 @@
                             <button type="submit" class="btn w-100 btn-primary mt-2 mb-3">Register</button>
 
                             <div class="form-group text-center">
-                                Already have account? <a href="{{ route("login.index") }}">Login here</a>
+                                Already have account? <a href="{{ route("login.index") }}" class="text-decoration-none">Login here</a>
                             </div>
                         </form>
                     </div>

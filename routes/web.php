@@ -27,7 +27,11 @@ Route::middleware(['guest'])->group(function () {
 });
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('/', function () {
-        return view('welcome');
-    })->name("welcome");
+    Route::post("/logout", [\App\Http\Controllers\Auth\AuthController::class, "logout"])->name("logout");
+
+    Route::get("/", [\App\Http\Controllers\Dashboard\DashboardController::class, "index"])->name("home.index");
+    Route::get("/home", [\App\Http\Controllers\Dashboard\DashboardController::class, "index"])->name("home.index");
+
+    Route::get("/tickets", [\App\Http\Controllers\Dashboard\Ticket\TicketController::class, "index"])->name("ticket.index");
+    Route::get("/tickets/create", [\App\Http\Controllers\Dashboard\Ticket\TicketController::class, "create"])->name("ticket.create");
 });
