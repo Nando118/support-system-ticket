@@ -7,47 +7,56 @@
             <li class="breadcrumb-item active" aria-current="page">Tickets</li>
         </ol>
     </nav>
-
 @endsection
 
 @section('content')
-    <div class="container">
+    <div class="container-fluid">
         <div class="card">
             <div class="card-header font-weight-bold">
                 Tickets
             </div>
             <div class="card-body">
-                <table id="tbl_list" class="table table-striped table-bordered" cellspacing="0" width="100%">
-                    <thead>
-                    <tr>
-                        <th>No</th>
-                        <th>Title</th>
-                        <th>Description</th>
-                        <th>Priority</th>
-                        <th>Status</th>
-                        <th>Created At</th>
-                        <th style="width: 12%">Action</th>
-                    </tr>
-                    </thead>
-                    <tbody>
+                <div class="table-responsive">
+                    <table id="tbl_list" class="table table-striped" width="100%">
+                        <thead>
+                        <tr >
+                            <th>No</th>
+                            <th>Ticket Number</th>
+                            <th>Title</th>
+                            <th>Label</th>
+                            <th>Category</th>
+                            <th>Priority</th>
+                            <th>Status</th>
+                            <th>Created At</th>
+                            <th>Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
 
-                    </tbody>
-                </table>
+                        </tbody>
+                    </table>
+                </div>
             </div>
             <div class="card-footer">
-                <a href="{{ route("ticket.create") }}" class="btn btn-success">Create Ticket</a>
+                @can("create-ticket")
+                    <a href="{{ route("ticket.create") }}" class="btn btn-success">Create Ticket</a>
+                @endcan
             </div>
         </div>
     </div>
 @endsection
 
-@push("script")
+@push("scripts")
     <script type="text/javascript">
+        // Datatables
         $(document).ready(function () {
             $('#tbl_list').DataTable({
                 processing: true,
                 serverSide: true,
                 ajax: '{{ route('ticket.index') }}',
+                language: {
+                    zeroRecords: "There is no ticket data yet",
+                },
                 columns: [
                     {
                         data: null,
@@ -59,8 +68,10 @@
                             return meta.row + meta.settings._iDisplayStart + 1;
                         }
                     },
+                    { data: 'ticket_number', name: 'ticket_number' },
                     { data: 'title', name: 'title' },
-                    { data: 'description', name: 'description' },
+                    { data: 'label', name: 'label' },
+                    { data: 'category', name: 'category' },
                     { data: 'priority', name: 'priority' },
                     { data: 'status', name: 'status' },
                     { data: 'created_at', name: 'created_at' },
@@ -68,14 +79,15 @@
                 ],
                 columnDefs: [
                     {
-                        target: 5,
+                        target: 7,
                         render: DataTable.render.date()
                     },
                 ],
-                order: [5, 'desc'],
+                order: [7, 'desc'],
             });
         });
 
+        // Action button
         $('#tbl_list').on('click', '.delete', function (){
             const el = $(this);
             Swal.fire({
@@ -117,5 +129,22 @@
                 }
             });
         });
+
+        // POP UP Message
+        @if(session('error_create_ticket'))
+            Swal.fire({
+                icon: 'error',
+                title: 'Gagal membuat ticket!',
+                text: '{{ session('error_create_ticket') }}'
+            });
+        @endif
+
+        @if(session('success_create_ticket'))
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil membuat ticket!',
+                text: '{{ session('success_create_ticket') }}'
+            });
+        @endif
     </script>
 @endpush

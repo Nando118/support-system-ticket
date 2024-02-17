@@ -17,6 +17,7 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap4.min.css" />
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <script src="https://kit.fontawesome.com/ea360171eb.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.tiny.cloud/1/0a8alqx5zzut2j8shq1mbl0ar22ejaa1ytd9p3xn12h5o0n2/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
 @stop
 
 @section('js')

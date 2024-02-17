@@ -3,9 +3,12 @@
 namespace App\Providers;
 
 // use Illuminate\Support\Facades\Gate;
+use App\Models\Ticket;
 use App\Models\User;
 use App\Policies\MenuPolicy;
 use App\Policies\RegularUserPolicy;
+use App\Policies\TicketPolicy;
+use Illuminate\Auth\Access\Response;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
 
@@ -27,6 +30,10 @@ class AuthServiceProvider extends ServiceProvider
     {
         Gate::define('create-ticket', function (User $user) {
             return $user->role === "regular_user";
+        });
+
+        Gate::define('assign-ticket', function (User $user) {
+            return $user->role === "super_admin";
         });
     }
 }

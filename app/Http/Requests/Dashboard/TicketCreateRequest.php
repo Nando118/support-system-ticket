@@ -22,7 +22,15 @@ class TicketCreateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            "title" => ["required", "string", "min:4", "max:100"],
+            "description" => ["required", "string", "min:10"],
+            "labels" => ["required"],
+            "labels.*" => ["in:bug,question,enhancement"],
+            "categories" => ["required"],
+            "categories.*" => ["in:uncategorized,billing/payments,technical question"],
+            "priority" => ["required"],
+            "attachments" => ["nullable"],
+            "attachments.*" => ["mimes:jpg,jpeg,png,rar,zip", "max:2048"]
         ];
     }
 }

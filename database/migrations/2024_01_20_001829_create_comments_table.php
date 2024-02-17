@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreign("ticket_id")->references("id")->on("tickets");
             $table->unsignedBigInteger("user_id")->nullable(false);
             $table->foreign("user_id")->references("id")->on("users");
-            $table->string("comment", 200)->nullable();
+            $table->text("comment")->nullable(false);
             $table->timestamps();
         });
     }
