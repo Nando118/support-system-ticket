@@ -41,15 +41,15 @@
                     <div class="form-group group1">
                         <label for="checkbox">Labels<span style="color: red;">*</span></label> <br>
                         <div class="form-check form-check-inline">
-                            <input class="form-check-input checkbox-group1 @error('labels') is-invalid @enderror" type="checkbox" id="inlineCheckbox1" name="labels[]" value="bug" {{ in_array('bug', old('labels', [])) ? 'checked' : '' }} onchange="handleCheckboxChange(this)">
+                            <input class="form-check-input checkbox-group1 @error('labels') is-invalid @enderror" type="checkbox" id="inlineCheckbox1" name="labels[]" value="bug" onchange="handleCheckboxChange(this)">
                             <label class="form-check-label" for="inlineCheckbox1">Bug</label>
                         </div>
                         <div class="form-check form-check-inline">
-                            <input class="form-check-input checkbox-group1 @error('labels') is-invalid @enderror" type="checkbox" id="inlineCheckbox2" name="labels[]" value="question" {{ in_array('question', old('labels', [])) ? 'checked' : '' }} onchange="handleCheckboxChange(this)">
+                            <input class="form-check-input checkbox-group1 @error('labels') is-invalid @enderror" type="checkbox" id="inlineCheckbox2" name="labels[]" value="question" onchange="handleCheckboxChange(this)">
                             <label class="form-check-label" for="inlineCheckbox2">Question</label>
                         </div>
                         <div class="form-check form-check-inline">
-                            <input class="form-check-input checkbox-group1 @error('labels') is-invalid @enderror" type="checkbox" id="inlineCheckbox3" name="labels[]" value="enhancement" {{ in_array('enhancement', old('labels', [])) ? 'checked' : '' }} onchange="handleCheckboxChange(this)">
+                            <input class="form-check-input checkbox-group1 @error('labels') is-invalid @enderror" type="checkbox" id="inlineCheckbox3" name="labels[]" value="enhancement" onchange="handleCheckboxChange(this)">
                             <label class="form-check-label" for="inlineCheckbox3">Enhancement</label>
                         </div>
                         @error('labels')
@@ -61,15 +61,15 @@
                     <div class="form-group group2">
                         <label for="checkbox">Categories<span style="color: red;">*</span></label> <br>
                         <div class="form-check form-check-inline">
-                            <input class="form-check-input checkbox-group2 @error('categories') is-invalid @enderror" type="checkbox" id="inlineCheckbox4" name="categories[]" value="uncategorized" {{ in_array('uncategorized', old('categories', [])) ? 'checked' : '' }} onchange="handleCheckboxChange(this)">
+                            <input class="form-check-input checkbox-group2 @error('categories') is-invalid @enderror" type="checkbox" id="inlineCheckbox4" name="categories[]" value="uncategorized" onchange="handleCheckboxChange(this)">
                             <label class="form-check-label" for="inlineCheckbox4">Uncategorized</label>
                         </div>
                         <div class="form-check form-check-inline">
-                            <input class="form-check-input checkbox-group2 @error('categories') is-invalid @enderror" type="checkbox" id="inlineCheckbox5" name="categories[]" value="billing/payments" {{ in_array('billing/payments', old('categories', [])) ? 'checked' : '' }} onchange="handleCheckboxChange(this)">
+                            <input class="form-check-input checkbox-group2 @error('categories') is-invalid @enderror" type="checkbox" id="inlineCheckbox5" name="categories[]" value="billing/payments" onchange="handleCheckboxChange(this)">
                             <label class="form-check-label" for="inlineCheckbox5">Billing/Payments</label>
                         </div>
                         <div class="form-check form-check-inline">
-                            <input class="form-check-input checkbox-group2 @error('categories') is-invalid @enderror" type="checkbox" id="inlineCheckbox6" name="categories[]" value="technical question" {{ in_array('technical question', old('categories', [])) ? 'checked' : '' }} onchange="handleCheckboxChange(this)">
+                            <input class="form-check-input checkbox-group2 @error('categories') is-invalid @enderror" type="checkbox" id="inlineCheckbox6" name="categories[]" value="technical question" onchange="handleCheckboxChange(this)">
                             <label class="form-check-label" for="inlineCheckbox6">Technical Question</label>
                         </div>
                         @error('categories')

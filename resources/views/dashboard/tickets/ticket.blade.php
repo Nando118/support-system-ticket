@@ -88,47 +88,6 @@
         });
 
         // Action button
-        $('#tbl_list').on('click', '.delete', function (){
-            const el = $(this);
-            Swal.fire({
-                icon: 'warning',
-                title: 'Delete Employee Data',
-                text: "Are you sure you want to delete this employee data?",
-                showCancelButton: true,
-                confirmButtonText: 'Yes',
-                cancelButtonText: 'Cancel',
-            }).then((result) => {
-                if(result.value){
-                    $('.loading').show();
-                    $.ajax({
-                        url: el.data('url'),
-                        type: 'DELETE',
-                        dataType: 'JSON',
-                        headers: {
-                            'X-CSRF-TOKEN': "{{ csrf_token() }}"
-                        }
-                    }).always(function (){
-                        $('.loading').hide();
-                    }).done(function (data) {
-                        if(data.success){
-                            $('#tbl_list').DataTable().ajax.reload();
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Success!',
-                                text: 'Employee data has been successfully deleted!',
-                            });
-                        }
-                        else {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'ERROR',
-                                text: 'Employee data failed to delete!',
-                            });
-                        }
-                    });
-                }
-            });
-        });
 
         // POP UP Message
         @if(session('error_create_ticket'))

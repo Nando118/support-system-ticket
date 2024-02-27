@@ -42,7 +42,8 @@
                     <p class="my-3">
                         {!! $ticket->description !!}
                     </p>
-                    @if($attachments)
+                    @if($attachments->isNotEmpty())
+                        <p class="h6 mt-5">Attachments</p>
                         <hr>
                         @foreach($attachments as $attachment)
                             <a href="{{ asset('storage/' . str_replace('public/', '', $attachment->file_path)) }}" class="badge badge-success" target="_blank">{{ $attachment->file_name }}</a>

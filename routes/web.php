@@ -33,6 +33,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get("/home", [\App\Http\Controllers\Dashboard\DashboardController::class, "index"])->name("home.index");
 
     Route::get("/tickets", [\App\Http\Controllers\Dashboard\Ticket\TicketController::class, "index"])->name("ticket.index");
+    Route::post("/tickets", [\App\Http\Controllers\Dashboard\Ticket\TicketController::class, "assignEngineer"])->name("ticket.assign");
     Route::get("/tickets/create", [\App\Http\Controllers\Dashboard\Ticket\TicketController::class, "create"])->name("ticket.create");
     Route::post("/tickets/create", [\App\Http\Controllers\Dashboard\Ticket\TicketController::class, "store"])->name("ticket.store");
 

@@ -37,7 +37,7 @@ class TicketController extends Controller
 
             return DataTables::of($data_builder)
                 ->addColumn('action', function ($row) use ($engineers) {
-                    return view("components.assign-engineer-to-ticket", ["id" => $row->id, "engineers" => $engineers])->render();
+                    return view("components.assign-engineer-to-ticket", ["id" => $row->id, "engineers" => $engineers]);
                 })
                 ->toJson();
         }
@@ -102,6 +102,30 @@ class TicketController extends Controller
             Log::error($e);
             DB::rollBack();
             return redirect()->route("ticket.index")->with('error_create_ticket', 'Terjadi kesalahan saat membuat ticket!');
+        }
+    }
+
+    public function assignEngineer(Request $request) {
+        try {
+            DB::beginTransaction();
+
+            $ticketId = $request->input('ticket_id');
+            $engineerId = $request->input('engineer_id');
+
+            // Menggunakan "SELECT ... FOR UPDATE" untuk mengunci baris
+            $ticket = Ticket::query()->where("id", "=", $ticketId)->lockForUpdate()->firstOrFail();
+
+            // Melakukan pembaruan data tiket
+            $ticket->engineer_id = $engineerId;
+            $ticket->status = "ongoing";
+            $ticket->save();
+
+            DB::commit();
+            return true;
+        } catch (\Exception $e) {
+            Log::error($e);
+            DB::rollBack();
+            return false;
         }
     }
 }
