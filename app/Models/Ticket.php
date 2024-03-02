@@ -33,6 +33,10 @@ class Ticket extends Model
             return Ticket::query()
                 ->where("user_id", "=", $user_id)
                 ->where("status", "=", $status)->count();
+        }else if ($role === "engineer") {
+            return Ticket::query()
+                ->where("engineer_id", "=", $user_id)
+                ->where("status", "=", $status)->count();
         }else{
             return Ticket::all()->where("status", "=", $status)->count();
         }
@@ -42,7 +46,9 @@ class Ticket extends Model
     public static function getTicketByRole(string $role, int $user_id = null) {
         if ($role === "regular_user") {
             return Ticket::query()->where("user_id", "=", $user_id)->get();
-        }else{
+        }else if($role === "engineer"){
+            return Ticket::query()->where("engineer_id", "=", $user_id)->get();
+        } else{
             return Ticket::all();
         }
     }
@@ -51,6 +57,10 @@ class Ticket extends Model
 
     public function user(): BelongsTo {
         return $this->belongsTo(User::class, "user_id", "id");
+    }
+
+    public function engineer(): BelongsTo {
+        return $this->belongsTo(User::class, "engineer_id", "id");
     }
 
     public function attachments(): HasMany {

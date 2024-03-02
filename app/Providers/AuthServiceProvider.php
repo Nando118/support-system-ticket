@@ -20,7 +20,7 @@ class AuthServiceProvider extends ServiceProvider
      * @var array<class-string, class-string>
      */
     protected $policies = [
-
+        Ticket::class => TicketPolicy::class,
     ];
 
     /**

@@ -21,13 +21,14 @@
                         <thead>
                         <tr >
                             <th>No</th>
+                            <th>Created At</th>
                             <th>Ticket Number</th>
                             <th>Title</th>
                             <th>Label</th>
                             <th>Category</th>
                             <th>Priority</th>
                             <th>Status</th>
-                            <th>Created At</th>
+                            <th>Engineer</th>
                             <th>Action</th>
                         </tr>
                         </thead>
@@ -68,22 +69,17 @@
                             return meta.row + meta.settings._iDisplayStart + 1;
                         }
                     },
+                    { data: 'created_at', name: 'created_at', render: DataTable.render.date(), },
                     { data: 'ticket_number', name: 'ticket_number' },
                     { data: 'title', name: 'title' },
                     { data: 'label', name: 'label' },
                     { data: 'category', name: 'category' },
                     { data: 'priority', name: 'priority' },
                     { data: 'status', name: 'status' },
-                    { data: 'created_at', name: 'created_at' },
+                    { data: 'engineer_id', name: 'engineer' },
                     { data: 'action', name: 'action', orderable: false, searchable: false },
                 ],
-                columnDefs: [
-                    {
-                        target: 7,
-                        render: DataTable.render.date()
-                    },
-                ],
-                order: [7, 'desc'],
+                order: [2, 'desc'],
             });
         });
 

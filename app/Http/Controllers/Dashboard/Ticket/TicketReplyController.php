@@ -10,7 +10,11 @@ use Illuminate\Http\Request;
 class TicketReplyController extends Controller
 {
     public function index(string $id) {
+
         $ticket = Ticket::query()->where("id", "=", $id)->firstOrFail();
+
+        $this->authorize("view", $ticket);
+
         $attachments = Attachment::query()->where("ticket_id", "=", $ticket->id)->get();
 
         return view("dashboard.tickets.reply.reply-ticket", [

@@ -50,4 +50,23 @@ class User extends Authenticatable
         return $this->hasMany(Ticket::class, "user_id", "id");
     }
 
+    public function ticketEngineers(): HasMany {
+        return $this->hasMany(Ticket::class, "engineer_id", "id");
+    }
+
+    // Get Role
+    public function isAdmin(): bool
+    {
+        return $this->role === 'super_admin';
+    }
+
+    public function isRegular(): bool
+    {
+        return $this->role === 'regular_user';
+    }
+
+    public function isEngineer(): bool
+    {
+        return $this->role === 'engineer';
+    }
 }

@@ -33,6 +33,7 @@ class TicketController extends Controller
                 $ticket->category = implode(', ', array_map('ucwords', $ticket->category));
                 $ticket->priority = ucfirst($ticket->priority);
                 $ticket->status = ucfirst($ticket->status);
+                $ticket->engineer_id = is_null($ticket->engineer_id) ? "Not assigned" : $engineers->where("id", "=", $ticket->engineer_id)->first()->name ?? "Unknown Engineer";
             }
 
             return DataTables::of($data_builder)
