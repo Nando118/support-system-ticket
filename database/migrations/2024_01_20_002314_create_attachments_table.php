@@ -13,8 +13,10 @@ return new class extends Migration
     {
         Schema::create('attachments', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger("ticket_id")->nullable(false);
+            $table->unsignedBigInteger("ticket_id")->nullable(true);
             $table->foreign("ticket_id")->references("id")->on("tickets");
+            $table->unsignedBigInteger("comment_id")->nullable(true);
+            $table->foreign("comment_id")->references("id")->on("comments");
             $table->string("file_name", 200)->nullable(false);
             $table->string("file_path", 200)->nullable(false);
             $table->timestamps();

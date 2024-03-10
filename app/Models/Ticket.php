@@ -54,7 +54,6 @@ class Ticket extends Model
     }
 
     // RELATIONS
-
     public function user(): BelongsTo {
         return $this->belongsTo(User::class, "user_id", "id");
     }
@@ -65,6 +64,10 @@ class Ticket extends Model
 
     public function attachments(): HasMany {
         return $this->hasMany(Attachment::class, "ticket_id", "id");
+    }
+
+    public function comments(): HasMany {
+        return $this->hasMany(Comment::class, "ticket_id", "id");
     }
 
 }

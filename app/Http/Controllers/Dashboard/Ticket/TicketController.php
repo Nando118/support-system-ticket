@@ -129,4 +129,8 @@ class TicketController extends Controller
             return false;
         }
     }
+
+    public function closeTicket(string $ticketId) {
+
+    }
 }
