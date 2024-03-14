@@ -36,8 +36,10 @@ Route::middleware(['auth'])->group(function () {
     Route::post("/tickets", [\App\Http\Controllers\Dashboard\Ticket\TicketController::class, "assignEngineer"])->name("ticket.assign");
     Route::get("/tickets/create", [\App\Http\Controllers\Dashboard\Ticket\TicketController::class, "create"])->name("ticket.create");
     Route::post("/tickets/create", [\App\Http\Controllers\Dashboard\Ticket\TicketController::class, "store"])->name("ticket.store");
+    Route::post("/tickets/close", [\App\Http\Controllers\Dashboard\Ticket\TicketController::class, "closeTicket"])->name("ticket.close");
 
     Route::get("/tickets/comments/{id}", [\App\Http\Controllers\Dashboard\Ticket\TicketCommentsController::class, "index"])->name("ticket.comments.index");
     Route::get("/tickets/comments/{id}/comment", [\App\Http\Controllers\Dashboard\Ticket\TicketCommentsController::class, "create"])->name("ticket.comments.create");
     Route::post("/tickets/comments/{id}/comment", [\App\Http\Controllers\Dashboard\Ticket\TicketCommentsController::class, "store"])->name("ticket.comments.store");
+    Route::post("/tickets/comments/{id}/comment/close", [\App\Http\Controllers\Dashboard\Ticket\TicketCommentsController::class, "closeTicket"])->name("ticket.comments.close");
 });

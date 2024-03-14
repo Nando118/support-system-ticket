@@ -1,11 +1,15 @@
+@section('content_header')
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+@stop
+
 <div>
     <!-- Act only according to that maxim whereby you can, at the same time, will that it should become a universal law. - Immanuel Kant -->
     <div class="btn-group">
         <a href="{{ route("ticket.comments.index", ["id" => $id]) }}" class="btn btn-primary btn-sm" title="View Reply"><i class="fa-regular fa-comments"></i><p style="position: absolute; top: -5px; right: -5px; z-index: 50" class="text-bold badge badge-danger d-flex">99</p></a>
         @can("assign-ticket")
-            <button type="button" class="btn btn-info btn-sm assign-engineer-btn" title="Assign Engineer" data-toggle="modal" data-target="#exampleModal-{{ $id }}" data-ticket-id="{{ $id }}"><i class="fa-solid fa-user"></i></button>
+            <button type="button" class="btn btn-info btn-sm assign-engineer-btn" title="Assign Engineer" data-toggle="modal" data-target="#exampleModal-{{ $id }}" data-ticket-id="{{ $id }}"  @if($status === "Closed") disabled @endif><i class="fa-solid fa-user"></i></button>
         @endcan
-        <button type="button" class="btn btn-success btn-sm" title="Close Ticket"><i class="fa-solid fa-check"></i></button>
+        <button type="button" class="btn btn-success btn-sm close-ticket-btn" title="Close Ticket" data-ticket-id="{{ $id }}" @if($status === "Closed") disabled @endif><i class="fa-solid fa-check"></i></button>
     </div>
 </div>
 
@@ -46,6 +50,7 @@
 </div>
 
 <script>
+    // Assign Engineer
     $(document).ready(function () {
         $(".btn-assign").off("click").on("click", function () {
             var ticketId = $(this).closest('.modal').find('#ticket_id').val();
@@ -90,6 +95,68 @@
                             Swal.fire({
                                 title: 'Error!',
                                 text: 'Gagal menetapkan Engineer untuk ticket ini. Silahkan coba lagi nanti!',
+                                icon: 'error',
+                                confirmButtonText: 'OK'
+                            });
+                            // console.log(xhr.responseText);
+                        }
+                    });
+                }
+            });
+        });
+    });
+
+    // Close Ticket
+    $(document).ready(function() {
+        // Event handler for Close Ticket button click
+        $(".close-ticket-btn").click(function() {
+            var ticketId = $(this).data("ticket-id");
+            var url = "{{ route('ticket.close') }}";
+            var csrfToken = $('meta[name="csrf-token"]').attr('content'); // Ambil token CSRF
+
+            // Tampilkan pesan konfirmasi menggunakan SweetAlert2
+            Swal.fire({
+                title: 'Tutup Ticket',
+                text: "Apakah Anda yakin ingin menutup ticket ini?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes!',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Jika pengguna menekan tombol "Yes", kirim permintaan AJAX untuk menutup tiket
+                    $.ajax({
+                        url: url,
+                        method: "POST",
+                        headers: {
+                            'X-CSRF-TOKEN': csrfToken // Sertakan token CSRF dalam header permintaan
+                        },
+                        data: {
+                            ticket_id: ticketId
+                        },
+                        success: function(response) {
+                            // Handle success response
+                            // Tindakan setelah pembaruan berhasil
+                            // Setelah tombol OK Swal diklik, perbarui tabel atau lakukan tindakan lain yang diperlukan
+                            $('#tbl_list').DataTable().ajax.reload();
+                            Swal.fire({
+                                title: 'Success!',
+                                text: 'Berhasil menutup ticket ini!.',
+                                icon: 'success',
+                                confirmButtonText: 'OK'
+                            });
+                            // Hapus backdrop modal secara manual
+                            $('.modal-backdrop').remove();
+                            // console.log(response);
+                        },
+                        error: function(xhr, status, error) {
+                            // Handle error response
+                            // console.error("Failed to close ticket:", error);
+                            // Tindakan jika terjadi kesalahan
+                            Swal.fire({
+                                title: 'Error!',
+                                text: 'Gagal menutup ticket ini. Silahkan coba lagi nanti!',
                                 icon: 'error',
                                 confirmButtonText: 'OK'
                             });

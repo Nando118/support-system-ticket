@@ -70,4 +70,12 @@ class TicketPolicy
     {
         //
     }
+
+    /**
+     * Determine whether the user can reply the model.
+     */
+    public function reply(User $user, Ticket $ticket): bool
+    {
+        return $ticket->status !== "closed";
+    }
 }

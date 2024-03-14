@@ -38,6 +38,8 @@ class TicketCommentsController extends Controller
 
         $ticket = Ticket::query()->where("id", "=", $ticket_id)->firstOrFail();
 
+        $this->authorize('reply', $ticket);
+
         return view("dashboard.tickets.comments.form.form-comment-ticket", [
             "title_page" => "Support Ticket System | Reply Ticket",
             "ticket" => $ticket,
@@ -49,6 +51,9 @@ class TicketCommentsController extends Controller
             DB::beginTransaction();
 
             $validated = $request->validated();
+
+            $ticket = Ticket::query()->where("id", "=", $validated["ticket_id"])->firstOrFail();
+            $this->authorize('reply', $ticket);
 
             $comment = Comment::query()->create([
                 "ticket_id" => $validated["ticket_id"],
@@ -84,6 +89,25 @@ class TicketCommentsController extends Controller
             Log::error($e);
             DB::rollBack();
             return redirect()->route("ticket.comments.index", ["id" => $request->ticket_id])->with('error_reply_ticket', 'Ticket gagal dibalas!');
+        }
+    }
+
+    public function closeTicket(Request $request) {
+        try {
+            DB::beginTransaction();
+
+            $ticketId = $request->input('ticket_id');
+
+            $ticket = Ticket::findOrFail($ticketId);
+            $ticket->status = "closed";
+            $ticket->save();
+
+            DB::commit();
+            return response()->json(['success' => true]);
+        } catch (\Exception $e) {
+            Log::error($e);
+            DB::rollBack();
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
         }
     }
 }

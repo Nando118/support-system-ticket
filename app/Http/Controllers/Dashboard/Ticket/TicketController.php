@@ -38,7 +38,7 @@ class TicketController extends Controller
 
             return DataTables::of($data_builder)
                 ->addColumn('action', function ($row) use ($engineers) {
-                    return view("components.assign-engineer-to-ticket", ["id" => $row->id, "engineers" => $engineers]);
+                    return view("components.assign-engineer-to-ticket", ["id" => $row->id, "engineers" => $engineers, "status" => $row->status]);
                 })
                 ->toJson();
         }
@@ -130,7 +130,22 @@ class TicketController extends Controller
         }
     }
 
-    public function closeTicket(string $ticketId) {
+    public function closeTicket(Request $request) {
+        try {
+            DB::beginTransaction();
 
+            $ticketId = $request->input('ticket_id');
+
+            $ticket = Ticket::findOrFail($ticketId);
+            $ticket->status = "closed";
+            $ticket->save();
+
+            DB::commit();
+            return response()->json(['success' => true]);
+        } catch (\Exception $e) {
+            Log::error($e);
+            DB::rollBack();
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
+        }
     }
 }
