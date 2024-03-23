@@ -10,7 +10,7 @@
 @endsection
 
 @section('content')
-    <div class="container-fluid">
+    <div class="container-fluid pb-3">
         <div class="card">
             <div class="card-header font-weight-bold">
                 Tickets

@@ -42,4 +42,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get("/tickets/comments/{id}/comment", [\App\Http\Controllers\Dashboard\Ticket\TicketCommentsController::class, "create"])->name("ticket.comments.create");
     Route::post("/tickets/comments/{id}/comment", [\App\Http\Controllers\Dashboard\Ticket\TicketCommentsController::class, "store"])->name("ticket.comments.store");
     Route::post("/tickets/comments/{id}/comment/close", [\App\Http\Controllers\Dashboard\Ticket\TicketCommentsController::class, "closeTicket"])->name("ticket.comments.close");
+
+    Route::get("/users", [\App\Http\Controllers\Dashboard\User\UserController::class, "index"])->name("users.index");
+    Route::get("/users/create", [\App\Http\Controllers\Dashboard\User\UserController::class, "create"])->name("users.create");
+    Route::post("/users/create", [\App\Http\Controllers\Dashboard\User\UserController::class, "store"])->name("users.store");
+    Route::get("/users/{id}/edit", [\App\Http\Controllers\Dashboard\User\UserController::class, "edit"])->name("users.edit");
+    Route::post("/users/{id}/update", [\App\Http\Controllers\Dashboard\User\UserController::class, "update"])->name("users.update");
+    Route::delete("/users/{id}/delete", [\App\Http\Controllers\Dashboard\User\UserController::class, "delete"])->name("users.delete");
 });

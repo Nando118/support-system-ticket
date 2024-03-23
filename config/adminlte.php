@@ -314,8 +314,9 @@ return [
         ],
         [
             'text' => 'Users',
-            'url'  => '#',
+            'url'  => '/users',
             'icon' => 'fas fa-fw fa-users',
+            'can' => 'create-new-user'
         ],
         [
             'text' => 'Ticket Logs',

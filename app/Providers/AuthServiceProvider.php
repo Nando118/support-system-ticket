@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Policies\MenuPolicy;
 use App\Policies\RegularUserPolicy;
 use App\Policies\TicketPolicy;
+use App\Policies\UserPolicy;
 use Illuminate\Auth\Access\Response;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
@@ -21,6 +22,7 @@ class AuthServiceProvider extends ServiceProvider
      */
     protected $policies = [
         Ticket::class => TicketPolicy::class,
+        User::class => UserPolicy::class,
     ];
 
     /**
@@ -34,6 +36,10 @@ class AuthServiceProvider extends ServiceProvider
 
         Gate::define('assign-ticket', function (User $user) {
             return $user->role === "super_admin";
+        });
+
+        Gate::define('create-new-user', function (User $user) {
+           return $user->role === "super_admin";
         });
     }
 }
