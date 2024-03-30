@@ -16,8 +16,7 @@ class UserController extends Controller
 {
     public function index()
     {
-        $user = Auth::user();
-        $this->authorize("viewAny", $user);
+        $this->authorize("viewUsers", User::class);
 
         if (\request()->ajax()){
             $data_builder = User::query()->get();
@@ -40,8 +39,8 @@ class UserController extends Controller
 
     public function create()
     {
-        $user = Auth::user();
-        $this->authorize("create", $user);
+        $this->authorize("createNewUser", User::class);
+
         $action = route("users.create");
 
         return view("dashboard.users.form.form-user", [
@@ -52,8 +51,7 @@ class UserController extends Controller
 
     public function store(UserCreateRequest $request)
     {
-        $user = Auth::user();
-        $this->authorize("create", $user);
+        $this->authorize("createNewUser", User::class);
 
         try {
             DB::beginTransaction();
@@ -74,9 +72,10 @@ class UserController extends Controller
         }
     }
 
-    public function edit(string $id) {
+    public function edit(string $id)
+    {
         $current_user = Auth::user();
-        $this->authorize("update", $current_user);
+        $this->authorize("updateUserData", $current_user);
 
         $user = User::query()->where("id", "=", $id)->firstOrFail();
         $action = route("users.update", ["id" => $id]);
@@ -88,9 +87,10 @@ class UserController extends Controller
         ]);
     }
 
-    public function update(string $id, Request $request) {
+    public function update(string $id, Request $request)
+    {
         $current_user = Auth::user();
-        $this->authorize("update", $current_user);
+        $this->authorize("updateUserData", $current_user);
 
         try {
             $user = User::query()->where("id", "=", $id)->firstOrFail();
@@ -128,9 +128,10 @@ class UserController extends Controller
         }
     }
 
-    public function delete(string $id) {
+    public function delete(string $id)
+    {
         $current_user = Auth::user();
-        $this->authorize("delete", $current_user);
+        $this->authorize("deleteUserData", $current_user);
 
         $userData = User::findOrFail($id);
 

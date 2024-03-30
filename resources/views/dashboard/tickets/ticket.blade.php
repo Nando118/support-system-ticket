@@ -39,7 +39,7 @@
                 </div>
             </div>
             <div class="card-footer">
-                @can("create-ticket")
+                @can("create-new-ticket")
                     <a href="{{ route("ticket.create") }}" class="btn btn-success">Create Ticket</a>
                 @endcan
             </div>
@@ -94,11 +94,27 @@
             });
         @endif
 
+        @if(session('error_assign_ticket'))
+            Swal.fire({
+                icon: 'error',
+                title: 'Gagal menetapkan engineer untuk ticket!',
+                text: '{{ session('error_assign_ticket') }}'
+            });
+        @endif
+
         @if(session('success_create_ticket'))
             Swal.fire({
                 icon: 'success',
                 title: 'Berhasil membuat ticket!',
                 text: '{{ session('success_create_ticket') }}'
+            });
+        @endif
+
+        @if(session('success_assign_ticket'))
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil menetapkan engineer untuk ticket!',
+                text: '{{ session('success_assign_ticket') }}'
             });
         @endif
     </script>

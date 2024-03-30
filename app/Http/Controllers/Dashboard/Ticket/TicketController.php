@@ -48,19 +48,23 @@ class TicketController extends Controller
         ]);
     }
 
-    public function create(){
-        if (Gate::allows('create-ticket')) {
-            return view("dashboard.tickets.form.form-ticket", [
-                "title_page" => "Support Ticket System | Create Ticket"
-            ]);
-        }else{
-            abort(403, 'Unauthorized action.');
-        }
+    public function create()
+    {
+        $this->authorize("createNewTicket", Ticket::class);
+
+        return view("dashboard.tickets.form.form-ticket", [
+            "title_page" => "Support Ticket System | Create Ticket"
+        ]);
     }
 
-    public function store(TicketCreateRequest $request){
+    public function store(TicketCreateRequest $request)
+    {
+        $this->authorize("createNewTicket", Ticket::class);
+
         try {
             DB::beginTransaction();
+
+            $currentUser = Auth::user();
 
             // Generate Ticket Number
             $ticketNumber = TicketNumberHelper::generateTicketNumber();
@@ -74,7 +78,7 @@ class TicketController extends Controller
                 "label" => $validated['labels'],
                 "category" => $validated['categories'],
                 "priority" => $validated['priority'],
-                "user_id" => auth()->id()
+                "user_id" => $currentUser->id
             ]);
 
             $ticketId = $ticket->id;
@@ -97,6 +101,14 @@ class TicketController extends Controller
                     $attachment->save();
                 }
             }
+
+            \App\Models\Log::query()->create([
+               "ticket_id" => $ticketId,
+               "user_id" => $currentUser->id,
+               "type" => "CREATE",
+               "activity" => "Pengguna telah membuat ticket baru"
+            ]);
+
             DB::commit();
             return redirect()->route("ticket.index")->with('success_create_ticket', 'Ticket berhasil dibuat!');
         } catch(\Exception $e) {
@@ -106,9 +118,14 @@ class TicketController extends Controller
         }
     }
 
-    public function assignEngineer(Request $request) {
+    public function assignEngineer(Request $request)
+    {
+        $this->authorize("assignEngineerToTicket", Ticket::class);
+
         try {
             DB::beginTransaction();
+
+            $currentUser = Auth::user();
 
             $ticketId = $request->input('ticket_id');
             $engineerId = $request->input('engineer_id');
@@ -121,24 +138,41 @@ class TicketController extends Controller
             $ticket->status = "ongoing";
             $ticket->save();
 
+            \App\Models\Log::query()->create([
+                "ticket_id" => $ticketId,
+                "user_id" => $currentUser->id,
+                "type" => "ASSIGN",
+                "activity" => "Admin telah menetapkan " . User::query()->where("id", "=", $engineerId)->value("name") . " , sebagai engineer untuk ticket ini"
+            ]);
+
             DB::commit();
-            return true;
+            return redirect()->route("ticket.index")->with('success_assign_ticket', 'Berhasil menetapkan engineer!');
         } catch (\Exception $e) {
             Log::error($e);
             DB::rollBack();
-            return false;
+            return redirect()->route("ticket.index")->with('error_assign_ticket', 'Gagal menetapkan engineer!');
         }
     }
 
-    public function closeTicket(Request $request) {
+    public function closeTicket(Request $request)
+    {
         try {
             DB::beginTransaction();
+
+            $currentUser = Auth::user();
 
             $ticketId = $request->input('ticket_id');
 
             $ticket = Ticket::findOrFail($ticketId);
             $ticket->status = "closed";
             $ticket->save();
+
+            \App\Models\Log::query()->create([
+                "ticket_id" => $ticketId,
+                "user_id" => $currentUser->id,
+                "type" => "CLOSED",
+                "activity" => "Pengguna telah menutup ticket ini"
+            ]);
 
             DB::commit();
             return response()->json(['success' => true]);

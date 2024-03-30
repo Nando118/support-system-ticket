@@ -49,4 +49,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get("/users/{id}/edit", [\App\Http\Controllers\Dashboard\User\UserController::class, "edit"])->name("users.edit");
     Route::post("/users/{id}/update", [\App\Http\Controllers\Dashboard\User\UserController::class, "update"])->name("users.update");
     Route::delete("/users/{id}/delete", [\App\Http\Controllers\Dashboard\User\UserController::class, "delete"])->name("users.delete");
+
+    Route::get("/ticket-logs", [\App\Http\Controllers\Dashboard\Log\LogController::class, "index"])->name("log.index");
 });

@@ -70,4 +70,8 @@ class Ticket extends Model
         return $this->hasMany(Comment::class, "ticket_id", "id");
     }
 
+    public function logs(): HasMany {
+        return $this->hasMany(Log::class, "ticket_id", "id");
+    }
+
 }

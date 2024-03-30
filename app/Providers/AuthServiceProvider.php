@@ -3,10 +3,10 @@
 namespace App\Providers;
 
 // use Illuminate\Support\Facades\Gate;
+use App\Models\Log;
 use App\Models\Ticket;
 use App\Models\User;
-use App\Policies\MenuPolicy;
-use App\Policies\RegularUserPolicy;
+use App\Policies\LogPolicy;
 use App\Policies\TicketPolicy;
 use App\Policies\UserPolicy;
 use Illuminate\Auth\Access\Response;
@@ -23,6 +23,7 @@ class AuthServiceProvider extends ServiceProvider
     protected $policies = [
         Ticket::class => TicketPolicy::class,
         User::class => UserPolicy::class,
+        Log::class => LogPolicy::class,
     ];
 
     /**
@@ -30,16 +31,32 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Gate::define('create-ticket', function (User $user) {
-            return $user->role === "regular_user";
+        Gate::define('create-new-ticket', function (User $user) {
+            if ($user->isRegular()) {
+                return true;
+            }
+            return false;
         });
 
         Gate::define('assign-ticket', function (User $user) {
-            return $user->role === "super_admin";
+            if ($user->isAdmin()) {
+                return true;
+            }
+            return false;
         });
 
-        Gate::define('create-new-user', function (User $user) {
-           return $user->role === "super_admin";
+        Gate::define('view-users', function (User $user) {
+            if ($user->isAdmin()) {
+                return true;
+            }
+            return false;
+        });
+
+        Gate::define('view-logs', function (User $user) {
+            if ($user->isAdmin()) {
+                return true;
+            }
+            return false;
         });
     }
 }

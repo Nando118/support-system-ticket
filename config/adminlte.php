@@ -316,23 +316,14 @@ return [
             'text' => 'Users',
             'url'  => '/users',
             'icon' => 'fas fa-fw fa-users',
-            'can' => 'create-new-user'
+            'can' => 'view-users'
         ],
         [
             'text' => 'Ticket Logs',
-            'url'  => '#',
+            'url'  => '/ticket-logs',
             'icon' => 'fas fa-fw fa-clipboard-list',
-        ],
-        [
-            'text' => 'Categories',
-            'url'  => 'admin/settings',
-            'icon' => 'fas fa-fw fa-grip-horizontal',
-        ],
-        [
-            'text' => 'Labels',
-            'url'  => '#',
-            'icon' => 'fas fa-fw fa-tag',
-        ],
+            'can' => 'view-logs'
+        ]
     ],
 
     /*

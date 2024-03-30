@@ -8,19 +8,20 @@ use App\Models\Attachment;
 use App\Models\Comment;
 use App\Models\Ticket;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class TicketCommentsController extends Controller
 {
-    public function index(string $ticket_id) {
-
+    public function index(string $ticket_id)
+    {
         $ticket = Ticket::query()->where("id", "=", $ticket_id)->firstOrFail();
         $comments = Comment::query()->where("ticket_id", "=", $ticket_id)
             ->orderBy('created_at', 'asc')
             ->get();
 
-        $this->authorize("view", $ticket);
+        $this->authorize("viewTicket", $ticket);
 
         $attachments = Attachment::query()->where("ticket_id", "=", $ticket->id)
             ->whereNull("comment_id")
@@ -34,8 +35,8 @@ class TicketCommentsController extends Controller
         ]);
     }
 
-    public function create(string $ticket_id) {
-
+    public function create(string $ticket_id)
+    {
         $ticket = Ticket::query()->where("id", "=", $ticket_id)->firstOrFail();
 
         $this->authorize('reply', $ticket);
@@ -46,13 +47,17 @@ class TicketCommentsController extends Controller
         ]);
     }
 
-    public function store(TicketCommentRequest $request) {
+    public function store(TicketCommentRequest $request)
+    {
         try {
             DB::beginTransaction();
+
+            $currentUser = Auth::user();
 
             $validated = $request->validated();
 
             $ticket = Ticket::query()->where("id", "=", $validated["ticket_id"])->firstOrFail();
+
             $this->authorize('reply', $ticket);
 
             $comment = Comment::query()->create([
@@ -83,6 +88,13 @@ class TicketCommentsController extends Controller
                 }
             }
 
+            \App\Models\Log::query()->create([
+                "ticket_id" => $validated["ticket_id"],
+                "user_id" => $currentUser->id,
+                "type" => "REPLY",
+                "activity" => "Pengguna telah membalas ticket ini"
+            ]);
+
             DB::commit();
             return redirect()->route("ticket.comments.index", ["id" => $request->ticket_id])->with('success_reply_ticket', 'Ticket berhasil dibalas!');
         } catch (\Exception $e) {
@@ -92,15 +104,25 @@ class TicketCommentsController extends Controller
         }
     }
 
-    public function closeTicket(Request $request) {
+    public function closeTicket(Request $request)
+    {
         try {
             DB::beginTransaction();
+
+            $currentUser = Auth::user();
 
             $ticketId = $request->input('ticket_id');
 
             $ticket = Ticket::findOrFail($ticketId);
             $ticket->status = "closed";
             $ticket->save();
+
+            \App\Models\Log::query()->create([
+                "ticket_id" => $ticketId,
+                "user_id" => $currentUser->id,
+                "type" => "CLOSED",
+                "activity" => "Pengguna telah menutup ticket ini"
+            ]);
 
             DB::commit();
             return response()->json(['success' => true]);
