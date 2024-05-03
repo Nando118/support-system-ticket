@@ -5,7 +5,12 @@
 <div>
     <!-- Act only according to that maxim whereby you can, at the same time, will that it should become a universal law. - Immanuel Kant -->
     <div class="btn-group">
-        <a href="{{ route("ticket.comments.index", ["id" => $id]) }}" class="btn btn-primary btn-sm" title="View Reply"><i class="fa-regular fa-comments"></i><p style="position: absolute; top: -5px; right: -5px; z-index: 50" class="text-bold badge badge-danger d-flex">99</p></a>
+        <a href="{{ route("ticket.comments.index", ["id" => $id]) }}" class="btn btn-primary btn-sm" title="View Reply">
+            <i class="fa-regular fa-comments"></i>
+            @if($notification)
+                <span style="display: inline-block; width: 13px; height: 13px; background-color: red; border-radius: 50%; position: absolute; top: -6px; right: -5px; z-index: 50;"></span>
+            @endif
+        </a>
         @can("assign-ticket")
             <button type="button" class="btn btn-info btn-sm assign-engineer-btn" title="Assign Engineer" data-toggle="modal" data-target="#exampleModal-{{ $id }}" data-ticket-id="{{ $id }}"  @if($status === "Closed") disabled @endif><i class="fa-solid fa-user"></i></button>
         @endcan

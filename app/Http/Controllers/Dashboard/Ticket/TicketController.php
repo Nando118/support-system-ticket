@@ -6,6 +6,7 @@ use App\Helpers\TicketNumberHelper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Dashboard\TicketCreateRequest;
 use App\Models\Attachment;
+use App\Models\Comment;
 use App\Models\Ticket;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -38,7 +39,13 @@ class TicketController extends Controller
 
             return DataTables::of($data_builder)
                 ->addColumn('action', function ($row) use ($engineers) {
-                    return view("components.assign-engineer-to-ticket", ["id" => $row->id, "engineers" => $engineers, "status" => $row->status]);
+                    return view("components.assign-engineer-to-ticket",
+                        [
+                            "id" => $row->id,
+                            "engineers" => $engineers,
+                            "status" => $row->status,
+                            "notification" => Comment::getNotification($row->id)
+                        ]);
                 })
                 ->toJson();
         }

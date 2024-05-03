@@ -73,5 +73,4 @@ class Ticket extends Model
     public function logs(): HasMany {
         return $this->hasMany(Log::class, "ticket_id", "id");
     }
-
 }
